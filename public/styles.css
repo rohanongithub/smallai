@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #070707;
+}
+
+.container {
+    display: grid;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 1000px; /* Retain maximum width for large screens */
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: aliceblue;
+}
+
+form {
+    display: grid;
+    gap: 20px;
+}
+
+textarea {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 1000px; /* Fixed width for larger screens */
+    min-height: 3rem;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid black;
+    background: rgb(212, 206, 206);
+    outline: none;
+    height: 3rem;
+    border-radius: 5px;
+    resize: none; /* Prevent manual resizing */
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 1rem;
+    height: 3rem;
+    background-color: rgb(38, 89, 38);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+input[type="submit"]:hover {
+    background-color: #1d3327;
+}
+
+/* Media Query for tablets and smaller screens */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    textarea {
+        width: 100%; /* Make textarea take up full width on smaller screens */
+    }
+
+    input[type="submit"] {
+        width: 100%;
+    }
+}
+
+/* Media Query for very small screens */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    textarea {
+        font-size: 0.9rem;
+        height: 2.5rem;
+    }
+
+    input[type="submit"] {
+        font-size: 0.9rem;
+        height: 2.5rem;
+    }
+}
