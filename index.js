@@ -1,32 +1,55 @@
-import express from "express";
-import bodyParser from "body-parser";  // Import body-parser
+import express from 'express';
+import bodyParser from 'body-parser';
+import { CohereClient } from "cohere-ai";
 
 const app = express();
 const port = 3000;
 
-// Middleware to parse JSON and URL-encoded data
-app.use(bodyParser.json()); // To parse JSON data
-app.use(bodyParser.urlencoded({ extended: true })); // To parse URL-encoded form data
+// Initialize Cohere
+const cohere = new CohereClient({
+  token: "o6DdGd0awe4vhcOEBS4r3RJOt0PdNB4iC60lIE40",
+});
 
-// Set the view engine to ejs
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
-
-// Route to render index.ejs when accessing the root
+// Routes
 app.get('/', (req, res) => {
-    res.render('index'); // Assuming there's an 'index.ejs' file in the 'views' folder
+  res.render('index', { generatedText: null });
 });
+app.post('/response', async (req, res) => {
+    try {
+        console.log("BODY:", req.body);
+      const inputText = req.body.inputText;
+      const promptInput = `Please generate a creative response based on the following prompt: "${inputText}". Be imaginative and detailed.`
 
-// Route to handle POST requests
-app.post('/submit', (req, res) => {
-    const formData = req.body;  // Get the parsed form data
-    console.log(formData);  // Log the data to the console
-    res.send('Form data received!');
-});
+      console.log("Received inputText:", inputText); // 👈 Add this
+  
+      if (!inputText || typeof inputText !== 'string') {
+        throw new Error("Invalid inputText");
+      }
+  
+      const response = await cohere.generate({
+        model: "command",
+        prompt: promptInput,
+        max_tokens: 150,
+        temperature: 0.9,
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5,
+        
+      });
+      
+      const generatedText = response.generations[0].text;
+      res.render('index', { generatedText });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Error generating text");
+    }
+  });
+  
 
-// Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
